@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Welcome, {{ session.get('name') }}</h2>
+
+<div class="card">
+    <h3>Generate Smart Reply</h3>
+    <form method="post">
+        <textarea name="message" placeholder="Paste your message here..." required>{{ message }}</textarea>
+        <select name="tone">
+            <option value="formal" {% if tone=='formal' %}selected{% endif %}>Formal</option>
+            <option value="friendly" {% if tone=='friendly' %}selected{% endif %}>Friendly</option>
+            <option value="short" {% if tone=='short' %}selected{% endif %}>Short</option>
+        </select>
+        <button type="submit">Generate Reply</button>
+    </form>
+</div>
+
+{% if reply %}
+<div class="card result">
+    <h3>Generated Reply</h3>
+    <pre>{{ reply }}</pre>
+</div>
+{% endif %}
+
+<div class="card">
+    <h3>Recent Reply History</h3>
+    {% for item in history %}
+        <div class="history">
+            <b>Message:</b> {{ item['message'] }}<br>
+            <b>Tone:</b> {{ item['tone'] }}<br>
+            <b>Reply:</b>
+            <pre>{{ item['reply'] }}</pre>
+            <small>{{ item['created_at'] }}</small>
+        </div>
+    {% else %}
+        <p>No history yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
