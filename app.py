@@ -65,7 +65,7 @@ def generate_smart_reply(message, tone):
 def home():
     if "user_id" in session:
         return redirect(url_for("dashboard"))
-    return render_template("index.html")
+    return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
