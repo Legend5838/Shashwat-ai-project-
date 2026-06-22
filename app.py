@@ -36,11 +36,11 @@ def init_db():
             FOREIGN KEY(user_id) REFERENCES users(id)
         )
     """)
-conn.execute("""
-  CREATE TABLE IF NOT EXISTS password_otps (
-    email TEXT PRIMARY KEY,
-    otp TEXT NOT NULL,
-    created_at TEXT NOT NULL
+    conn.execute("""
+      CREATE TABLE IF NOT EXISTS password_otps (
+          email TEXT PRIMARY KEY,
+          otp TEXT NOT NULL,
+          created_at TEXT NOT NULL
 )
 """)    
     
