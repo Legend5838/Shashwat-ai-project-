@@ -122,9 +122,33 @@ def login():
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
     if request.method == "POST":
-        return "Password reset feature coming soon."
+        email = request.form["email"].strip().lower()
+        new_password = request.form["new_password"]
+
+        conn = get_db()
+        user = conn.execute(
+            "SELECT * FROM users WHERE email = ?",
+            (email,)
+        ).fetchone()
+
+        if user:
+            hashed_password = generate_password_hash(new_password)
+
+            conn.execute(
+                "UPDATE users SET password = ? WHERE email = ?",
+                (hashed_password, email)
+            )
+            conn.commit()
+            conn.close()
+
+            flash("Password reset successful. Please login.")
+            return redirect(url_for("login"))
+        else:
+            conn.close()
+            flash("Email not found.")
 
     return render_template("forgot_password.html")
+    
     
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
