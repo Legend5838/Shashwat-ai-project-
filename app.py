@@ -167,7 +167,7 @@ def forgot_password():
         return redirect(url_for("verify_otp"))
 
     return render_template("forgot_password.html")
-  @app.route("/verify-otp", methods=["GET", "POST"])
+@app.route("/verify-otp", methods=["GET", "POST"])
 def verify_otp():
     if request.method == "POST":
         email = session.get("reset_email")
