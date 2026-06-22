@@ -111,14 +111,10 @@ def login():
 
     return render_template("login.html")
 
-    @app.route('/forgot-password', methods=['GET', 'POST'])
+@app.route("/forgot-password")
 def forgot_password():
-    if request.method == 'POST':
-        email = request.form['email']
-        return "Password reset feature coming soon."
-
-    return render_template('forgot_password.html')
-
+    return render_template("forgot_password.html")
+    
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if "user_id" not in session:
