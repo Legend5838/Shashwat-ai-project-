@@ -3,7 +3,9 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import os
-
+import random
+import smtplib
+from email.mime.text import MIMEText
 app = Flask(__name__)
 app.secret_key = "change_this_secret_key_for_project"
 DB_NAME = "database.db"
@@ -34,6 +36,15 @@ def init_db():
             FOREIGN KEY(user_id) REFERENCES users(id)
         )
     """)
+conn.execute("""
+CREATE TABLE IF NOT EXISTS password_otps (
+    email TEXT PRIMARY KEY,
+    otp TEXT NOT NULL,
+    created_at TEXT NOT NULL
+)
+""")    
+    
+    
     conn.commit()
     conn.close()
 
@@ -123,32 +134,76 @@ def login():
 def forgot_password():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
-        new_password = request.form.get("new_password", "")
 
         conn = get_db()
-        user = conn.execute(
-            "SELECT * FROM users WHERE email = ?",
-            (email,)
+        user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+
+        if not user:
+            conn.close()
+            flash("Email not found.")
+            return render_template("forgot_password.html")
+
+        otp = str(random.randint(100000, 999999))
+
+        conn.execute(
+            "INSERT OR REPLACE INTO password_otps (email, otp, created_at) VALUES (?, ?, datetime('now'))",
+            (email, otp)
+        )
+        conn.commit()
+        conn.close()
+
+        msg = MIMEText(f"Your password reset OTP is: {otp}")
+        msg["Subject"] = "Password Reset OTP"
+        msg["From"] = os.environ.get("EMAIL_USER")
+        msg["To"] = email
+
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        server.login(os.environ.get("EMAIL_USER"), os.environ.get("EMAIL_PASS"))
+        server.send_message(msg)
+        server.quit()
+
+        session["reset_email"] = email
+        flash("OTP sent to your email.")
+        return redirect(url_for("verify_otp"))
+
+    return render_template("forgot_password.html")
+  @app.route("/verify-otp", methods=["GET", "POST"])
+def verify_otp():
+    if request.method == "POST":
+        email = session.get("reset_email")
+        otp = request.form.get("otp")
+        new_password = request.form.get("new_password")
+
+        conn = get_db()
+
+        record = conn.execute(
+            "SELECT * FROM password_otps WHERE email = ? AND otp = ?",
+            (email, otp)
         ).fetchone()
 
-        if user:
+        if record:
             hashed_password = generate_password_hash(new_password)
 
             conn.execute(
                 "UPDATE users SET password = ? WHERE email = ?",
                 (hashed_password, email)
             )
+
+            conn.execute(
+                "DELETE FROM password_otps WHERE email = ?",
+                (email,)
+            )
+
             conn.commit()
             conn.close()
 
             flash("Password reset successful. Please login.")
             return redirect(url_for("login"))
-        else:
-            conn.close()
-            flash("Email not found.")
 
-    return render_template("forgot_password.html")
-    
+        conn.close()
+        flash("Invalid OTP.")
+
+    return render_template("verify_otp.html")  
     
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
