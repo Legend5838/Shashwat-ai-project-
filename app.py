@@ -40,27 +40,35 @@ def init_db():
 def generate_smart_reply(message, tone):
     msg = message.lower().strip()
 
-    if "job" in msg or "interview" in msg:
-        base = "Thank you for reaching out. I am interested in this opportunity and would like to know more details about the role, responsibilities, and next steps."
-    elif "sorry" in msg or "mistake" in msg:
-        base = "I understand the concern. I sincerely apologize for the inconvenience and will make sure this is handled properly."
+    if len(msg) < 10:
+        base = "Could you please provide more details so I can assist you better?"
+
+    elif "job" in msg or "interview" in msg or "career" in msg:
+        base = "Thank you for your interest. I appreciate the opportunity and would like to know more details regarding the role and responsibilities."
+
+    elif "payment" in msg or "money" in msg or "fee" in msg:
+        base = "Thank you for the information. Please share complete payment details so I can review and respond appropriately."
+
     elif "meeting" in msg or "schedule" in msg:
-        base = "Thank you for the update. Please share a suitable time, and I will confirm my availability for the meeting."
-    elif "payment" in msg or "fee" in msg or "money" in msg:
-        base = "Thank you for informing me. Please share the complete payment details so I can review and respond accordingly."
-    elif "help" in msg or "support" in msg:
-        base = "I understand your request. I will check the details and try to help you with the best possible solution."
+        base = "Thank you for the update. Please share a suitable time and I will confirm my availability."
+
+    elif "support" in msg or "help" in msg or "issue" in msg:
+        base = "I understand your concern. I will review the issue carefully and provide assistance as soon as possible."
+
+    elif "sorry" in msg or "mistake" in msg:
+        base = "I appreciate your message. Thank you for acknowledging the situation. Let us work together toward a resolution."
+
     else:
-        base = "Thank you for your message. I have noted the details and will respond after reviewing the information."
+        base = f"Thank you for your message regarding '{message}'. I have noted the details and will respond appropriately."
 
     if tone == "formal":
         return "Dear Sir/Madam,\n\n" + base + "\n\nRegards"
-    if tone == "friendly":
-        return "Hi,\n\n" + base.replace("Thank you", "Thanks").replace("I am", "I'm") + "\n\nBest wishes"
-    if tone == "short":
-        return base.split(".")[0] + "."
-    return base
 
+    elif tone == "friendly":
+        return "Hi,\n\n" + base + "\n\nThanks!"
+
+    return base
+    
 @app.route("/")
 def home():
     if "user_id" in session:
