@@ -45,8 +45,8 @@ def init_db():
 """)    
     
     
-conn.commit()
-conn.close()
+    conn.commit()
+    conn.close()
 
 def generate_smart_reply(message, tone):
     msg = message.lower().strip()
