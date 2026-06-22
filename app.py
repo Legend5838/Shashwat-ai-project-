@@ -123,7 +123,7 @@ def login():
 def forgot_password():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
-          new_password = request.form.get("new_password", "")
+        new_password = request.form.get("new_password", "")
 
         conn = get_db()
         user = conn.execute(
