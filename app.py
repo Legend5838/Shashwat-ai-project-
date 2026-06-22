@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS password_otps (
 """)    
     
     
-    conn.commit()
-    conn.close()
+conn.commit()
+conn.close()
 
 def generate_smart_reply(message, tone):
     msg = message.lower().strip()
