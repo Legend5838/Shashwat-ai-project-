@@ -37,7 +37,7 @@ def init_db():
         )
     """)
 conn.execute("""
-CREATE TABLE IF NOT EXISTS password_otps (
+  CREATE TABLE IF NOT EXISTS password_otps (
     email TEXT PRIMARY KEY,
     otp TEXT NOT NULL,
     created_at TEXT NOT NULL
