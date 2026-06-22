@@ -111,8 +111,11 @@ def login():
 
     return render_template("login.html")
 
-@app.route("/forgot-password")
+@app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
+    if request.method == "POST":
+        return "Password reset feature coming soon."
+
     return render_template("forgot_password.html")
     
 @app.route("/dashboard", methods=["GET", "POST"])
