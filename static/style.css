@@ -1,73 +1,47 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
-    color: #222;
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#111827,#2563eb);
+    color:#111;
 }
-nav {
-    background: #222;
-    color: white;
-    padding: 15px 35px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+nav{
+    background:#020617;
+    color:white;
+    padding:18px 30px;
 }
-nav a {
-    color: white;
-    text-decoration: none;
-    margin-left: 18px;
+nav a{color:white;text-decoration:none;margin-right:18px}
+.container{width:90%;max-width:900px;margin:40px auto}
+.card{
+    background:white;
+    max-width:420px;
+    margin:60px auto;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
-.container {
-    width: 85%;
-    margin: 30px auto;
+.card h2{text-align:center;margin-bottom:25px}
+input,textarea,select{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:1px solid #ddd;
+    border-radius:12px;
+    box-sizing:border-box;
 }
-.hero {
-    background: white;
-    padding: 50px;
-    border-radius: 14px;
-    text-align: center;
-    box-shadow: 0 0 10px #ddd;
+button,.btn{
+    width:100%;
+    padding:14px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    cursor:pointer;
 }
-.card {
-    background: white;
-    padding: 25px;
-    margin-bottom: 25px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px #ddd;
-}
-input, textarea, select {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #bbb;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
-textarea {
-    min-height: 130px;
-}
-button, .btn {
-    background: #222;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    text-decoration: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-.alert {
-    padding: 12px;
-    background: #fff3cd;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-pre {
-    background: #f1f1f1;
-    padding: 12px;
-    white-space: pre-wrap;
-    border-radius: 8px;
-}
-.history {
-    border-top: 1px solid #ddd;
-    padding: 15px 0;
+button:hover,.btn:hover{background:#1d4ed8}
+.alert{
+    background:#fee2e2;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
 }
